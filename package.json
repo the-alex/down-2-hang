@@ -1,0 +1,19 @@
+{
+  "name": "down-2-hang",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "axios": "^0.18.0",
+    "body-parser": "^1.18.2",
+    "concurrently": "^3.5.1",
+    "express": "^4.16.2"
+  },
+  "scripts": {
+    "install": "yarn run install:client",
+    "install:client": "cd client && yarn install && yarn run build",
+    "dev": "concurrently \"yarn run dev:server\" \"yarn run dev:client\"",
+    "dev:server": "nodemon server.js",
+    "dev:client": "cd client && yarn run start",
+    "start": "node server.js"
+  }
+}
