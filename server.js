@@ -12,12 +12,22 @@ app.use(bodyParser.urlencoded({extended: true}));
 // Declare static files
 app.use(express.static(__dirname + '/client/build'));
 
-// ROUTES
-
+// ROUTES -----------------------------------------------------------
+// Test
 app.get('/api/hello', (request, response) => {
   response.send('Hello!');
 });
 
+// User
+// TODO: Handle duplicate username submission
+app.post('/api/user/create', (request, response) => {
+  const {username, password} = request.body;
+  db.models.User.create({username, password}).then(result => {
+    response.send(JSON.stringify(result));
+  });
+});
+
+// Status
 app.post('/api/status', (request, response) => {
   db.models.Status.create({text: request.body.text}).then(result => {
     response.send(JSON.stringify(result));
