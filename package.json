@@ -14,6 +14,7 @@
     "dev": "concurrently \"yarn run dev:server\" \"yarn run dev:client\"",
     "dev:server": "nodemon server.js",
     "dev:client": "cd client && yarn run start",
+    "dev:database": "sudo mongod",
     "start": "node server.js"
   }
 }
