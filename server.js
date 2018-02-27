@@ -27,15 +27,17 @@ app.post('/api/user/create', (request, response) => {
   });
 });
 
-// Status
-app.post('/api/status', (request, response) => {
-  db.models.Status.create({text: request.body.text}).then(result => {
-    response.send(JSON.stringify(result));
+app.get('/api/users', (request, response) => {
+  db.models.User.find().then(result => {
+    response.send(result);
   });
 });
 
+// Status
 app.get('/api/status', (request, response) => {
-  db.models.Status.find().then(result => response.send(JSON.stringify(result)));
+  db.models.User.find({}, 'username status').then(result =>
+    response.send(JSON.stringify(result)),
+  );
 });
 
 let port = process.env.PORT || 3001;

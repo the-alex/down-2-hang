@@ -7,8 +7,6 @@ const statusSchema = mongoose.Schema({
   text: {type: String, default: 'What a world!'},
 });
 
-const Status = mongoose.model('Status', statusSchema);
-
 // User
 const userSchema = mongoose.Schema({
   username: {type: String, unique: true, required: true, dropDups: true},
@@ -20,7 +18,6 @@ const User = mongoose.model('User', userSchema);
 
 module.exports = {
   models: {
-    Status,
     User,
   },
 };
