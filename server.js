@@ -13,11 +13,6 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static(__dirname + '/client/build'));
 
 // ROUTES -----------------------------------------------------------
-// Test
-app.get('/api/hello', (request, response) => {
-  response.send('Hello!');
-});
-
 // User
 // TODO: Handle duplicate username submission
 app.post('/api/user/create', (request, response) => {
