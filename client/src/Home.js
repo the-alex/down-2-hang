@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import axios from 'axios';
 import StatusList from './StatusList.js';
+import {Container} from 'semantic-ui-react';
 
 class Home extends Component {
   constructor(props) {
@@ -26,11 +27,11 @@ class Home extends Component {
 
   render() {
     return (
-      <div>
+      <Container style={{marginTop: '7em'}}>
         <h2>This is the `Home` component</h2>
         {/* <Status statusData={this.state.userStatusData} /> */}
         <StatusList statuses={this.state.statuses} />
-      </div>
+      </Container>
     );
   }
 }
