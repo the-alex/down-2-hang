@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
 import axios from 'axios';
 import StatusList from './StatusList.js';
+import StatusEditor from './StatusEditor.js';
 import {Container} from 'semantic-ui-react';
+import Auth from './Auth.js';
 
 class Home extends Component {
   constructor(props) {
@@ -9,14 +11,26 @@ class Home extends Component {
     // TODO: Should keep track of current user in another spot
     // TODO: statuses should not include current user's status
     this.state = {
+      currentStatus: '',
       statuses: [],
     };
   }
 
   fetchStatusData() {
     axios.get('/api/status').then(results => {
+      // Filter out this user's status from status list.
+      let statuses = [];
+      let currentStatus = '';
+      for (const status of results.data) {
+        if (status.username !== Auth.username) {
+          statuses.push(status);
+        } else {
+          currentStatus = status.status.text;
+        }
+      }
       this.setState({
-        statuses: results.data,
+        statuses,
+        currentStatus,
       });
     });
   }
@@ -28,8 +42,7 @@ class Home extends Component {
   render() {
     return (
       <Container style={{marginTop: '7em'}}>
-        <h2>This is the `Home` component</h2>
-        {/* <Status statusData={this.state.userStatusData} /> */}
+        <StatusEditor currentStatus={this.state.currentStatus} />
         <StatusList statuses={this.state.statuses} />
       </Container>
     );

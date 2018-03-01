@@ -48,6 +48,25 @@ app.get('/api/status', (request, response) => {
   );
 });
 
+app.post('/api/status', (request, response) => {
+  // Get the current user
+  const {username, statusText} = request.body;
+  console.log(`statusText: ${statusText}`);
+  // Search for the user
+  db.models.User.findOne({username})
+    .then(user => {
+      user.status.text = statusText;
+      return user.save();
+    })
+    .then(user => {
+      response.send(
+        JSON.stringify({username: user.username, status: user.status}),
+      );
+    });
+  // Update the User.status field
+  // return the updated message.
+});
+
 let port = process.env.PORT || 3001;
 
 app.listen(port, function() {
