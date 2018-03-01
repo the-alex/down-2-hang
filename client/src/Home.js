@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import axios from 'axios';
 import StatusList from './StatusList.js';
 import StatusEditor from './StatusEditor.js';
-import {Container} from 'semantic-ui-react';
+import {Container, Grid} from 'semantic-ui-react';
 import Auth from './Auth.js';
 
 class Home extends Component {
@@ -42,8 +42,14 @@ class Home extends Component {
   render() {
     return (
       <Container style={{marginTop: '7em'}}>
-        <StatusEditor currentStatus={this.state.currentStatus} />
-        <StatusList statuses={this.state.statuses} />
+        <Grid celled="internally" stackable>
+          <Grid.Column width={8}>
+            <StatusEditor currentStatus={this.state.currentStatus} />
+          </Grid.Column>
+          <Grid.Column width={8}>
+            <StatusList statuses={this.state.statuses} />
+          </Grid.Column>
+        </Grid>
       </Container>
     );
   }
