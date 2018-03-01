@@ -15,10 +15,23 @@ app.use(express.static(__dirname + '/client/build'));
 // ROUTES -----------------------------------------------------------
 // User
 // TODO: Handle duplicate username submission
-app.post('/api/user/create', (request, response) => {
+app.post('/api/users/signup', (request, response) => {
   const {username, password} = request.body;
   db.models.User.create({username, password}).then(result => {
-    response.send(JSON.stringify(result));
+    response.status(201).send(JSON.stringify(result));
+  });
+});
+
+app.post('/api/users/login', (request, response) => {
+  // Create a new token id to pair with a username
+  const {username, password} = request.body;
+  // Check in the database.
+  db.models.User.findOne({username, password}).then(result => {
+    if (result) {
+      response.status(200).send(JSON.stringify({msg: 'Success'}));
+    } else {
+      response.send(403).send(JSON.stringify({err: 'Credentials Invalid'}));
+    }
   });
 });
 

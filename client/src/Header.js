@@ -1,20 +1,29 @@
 import React from 'react';
 import {Container, Menu, Image} from 'semantic-ui-react';
+import {Link} from 'react-router-dom';
+import Auth from './Auth.js';
 
+// TODO: Link items only trigger if text is clicked, even though the whole box
+// lights up
+// TODO: Warning: <a> cannot appear as a descendant of <a>, error with link structure.
 const Header = () => (
-  <Menu fixed='top' inverted>
+  <Menu fixed="top" inverted>
     <Container>
-      <Menu.Item href='/' a='a' header>
-        <Image
-          size='tiny'
-          src='/logo.png'
-          style={{marginRight: '1.5em'}}
-        />
-        Down2Hang
+      <Menu.Item as="a" header>
+        <Image size="tiny" src="/logo.png" style={{marginRight: '1.5em'}} />
+        <Link to="/">Down2Hang</Link>
       </Menu.Item>
-      <Menu.Item floated='right' href='/logout' as='a'>Logout</Menu.Item>
+      {Auth.isAuthenticated() ? (
+        <Menu.Item floated="right" as="a" onClick={() => Auth.logout()}>
+          <Link to='/login'>Logout</Link>
+        </Menu.Item>
+      ) : (
+        <Menu.Item floated="right" as="a">
+          <Link to="/login">Login</Link>
+        </Menu.Item>
+      )}
     </Container>
   </Menu>
-)
+);
 
 export default Header;
