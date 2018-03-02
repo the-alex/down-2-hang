@@ -42,6 +42,7 @@ app.get('/api/users', (request, response) => {
   });
 });
 
+// TODO: Call this `statuses`
 // Status
 app.get('/api/status', (request, response) => {
   db.models.User.find({}, 'username status').then(result =>
@@ -68,6 +69,27 @@ app.post('/api/status', (request, response) => {
   // return the updated message.
 });
 
+// Find all chats with this username in them.
+app.get('/api/chats', (request, response) => {
+  db.models.Chat.find({}).then(chats => {
+    response.status(200).send(chats);
+  });
+});
+
+// Create a new chat room, potentially with selected users
+app.post('/api/chats', (request, response) => {
+  const {chatName} = request.body;
+  db.models.Chat.create({
+    chatName,
+  })
+    .then(result => {
+      response.status(200).send('Chat created');
+    })
+    .catch(error => {
+      response.send(JSON.stringify({error: error}));
+    });
+});
+
 let port = process.env.PORT || 3001;
 
 let server = app.listen(port, function() {
@@ -76,11 +98,12 @@ let server = app.listen(port, function() {
 
 io = socketIO(server);
 
-io.on('connection', (socket) => {
-    console.log(socket.id);
+io.on('connection', socket => {
+  console.log(`New socket.io connection: ${socket.id}`);
 
-    socket.on('SEND_MESSAGE', function(data){
-        io.emit('RECEIVE_MESSAGE', data);
-    })
+  socket.on('SEND_MESSAGE', data => {
+    io.emit('RECEIVE_MESSAGE', data);
+  });
+
+  socket.join('lobby');
 });
-

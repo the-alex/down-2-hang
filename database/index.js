@@ -14,10 +14,31 @@ const userSchema = mongoose.Schema({
   status: {type: statusSchema, default: statusSchema},
 });
 
+// Message
+const messageSchema = mongoose.Schema(
+  {
+    user: mongoose.Schema.ObjectId,
+    text: String,
+  },
+  {timestamps: true},
+);
+
+// Chat
+const chatSchema = mongoose.Schema(
+  {
+    messages: [messageSchema],
+    chatName: {type: String, default: 'lobby', unique: true},
+    participants: [mongoose.Schema.ObjectId],
+  },
+  {timestamps: true},
+);
+
 const User = mongoose.model('User', userSchema);
+const Chat = mongoose.model('Chat', chatSchema);
 
 module.exports = {
   models: {
     User,
+    Chat,
   },
 };
