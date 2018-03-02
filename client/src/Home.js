@@ -4,6 +4,7 @@ import StatusList from './StatusList.js';
 import StatusEditor from './StatusEditor.js';
 import {Container, Grid} from 'semantic-ui-react';
 import Auth from './Auth.js';
+import Chat from './Chat.js';
 
 class Home extends Component {
   constructor(props) {
@@ -43,11 +44,14 @@ class Home extends Component {
     return (
       <Container style={{marginTop: '7em'}}>
         <Grid celled="internally" stackable>
-          <Grid.Column width={8}>
+          <Grid.Column width={6}>
             <StatusEditor currentStatus={this.state.currentStatus} />
           </Grid.Column>
-          <Grid.Column width={8}>
+          <Grid.Column width={6}>
             <StatusList statuses={this.state.statuses} />
+          </Grid.Column>
+          <Grid.Column width={4}>
+            <Chat />
           </Grid.Column>
         </Grid>
       </Container>

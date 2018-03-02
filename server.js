@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const db = require('./database');
+const socketIO = require('socket.io');
 
 let app = express();
 
@@ -69,6 +70,17 @@ app.post('/api/status', (request, response) => {
 
 let port = process.env.PORT || 3001;
 
-app.listen(port, function() {
+let server = app.listen(port, function() {
   console.log(`listening on port ${port}`);
 });
+
+io = socketIO(server);
+
+io.on('connection', (socket) => {
+    console.log(socket.id);
+
+    socket.on('SEND_MESSAGE', function(data){
+        io.emit('RECEIVE_MESSAGE', data);
+    })
+});
+

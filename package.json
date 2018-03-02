@@ -10,7 +10,9 @@
     "mongoose": "^5.0.7",
     "react-router-dom": "^4.2.2",
     "semantic-ui-css": "^2.3.0",
-    "semantic-ui-react": "^0.78.3"
+    "semantic-ui-react": "^0.78.3",
+    "socket.io": "^2.0.4",
+    "socket.io-client": "^2.0.4"
   },
   "scripts": {
     "dev": "concurrently \"yarn run dev:server\" \"yarn run dev:client\"",
