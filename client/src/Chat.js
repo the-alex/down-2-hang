@@ -1,16 +1,20 @@
 import React from 'react';
-import {Container, Grid, Segment, Header, Form} from 'semantic-ui-react';
+import {Container, Segment, Header, Form} from 'semantic-ui-react';
 import io from 'socket.io-client';
-//import Auth from './Auth.js';
+import Auth from './Auth.js';
+import axios from 'axios';
 
 class Chat extends React.Component {
   constructor(props) {
     super(props);
 
+    this.fetchMessages = this.fetchMessages.bind(this);
+
     this.state = {
-      username: '',
+      username: Auth.username,
       message: '',
       messages: [],
+      //room: 'lobby',
     };
 
     this.socket = io('localhost:3000');
@@ -34,17 +38,28 @@ class Chat extends React.Component {
       this.setState({message: ''});
     };
   }
+
+  fetchMessages() {
+    axios.get('/api/chats').then(results => {
+      console.log(results);
+    });
+  }
+
+  componentDidMount() {
+    this.fetchMessages();
+  }
+
   render() {
     return (
       <Container>
         <Segment>
           <Header as="h2">Chat</Header>
-          <div class="ui small feed">
+          <div className="ui small feed">
             {this.state.messages.map(message => {
               return (
-                <div class="event">
-                  <div class="content">
-                    <div class="summary">
+                <div className="event">
+                  <div className="content">
+                    <div className="summary">
                       {message.author}: {message.message}
                     </div>
                   </div>
@@ -54,12 +69,6 @@ class Chat extends React.Component {
           </div>
         </Segment>
         <Segment>
-          <Form.Input
-            type="text"
-            placeholder="Username"
-            value={this.state.username}
-            onChange={ev => this.setState({username: ev.target.value})}
-          />
           <Form.Input
             type="text"
             placeholder="Message"
