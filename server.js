@@ -90,6 +90,10 @@ app.post('/api/chats', (request, response) => {
     });
 });
 
+
+
+// SERVER SETUP ------------------------------------------------
+
 let port = process.env.PORT || 3001;
 
 let server = app.listen(port, function() {

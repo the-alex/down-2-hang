@@ -41,4 +41,5 @@ module.exports = {
     User,
     Chat,
   },
+  mongoose,
 };
