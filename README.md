@@ -20,7 +20,23 @@ An app to make the world a little less bored, and a bit more spontanious.
   * Chat groups ("rooms")
     * Group chat data Model
 
-### Continue ...
+### Notes
 
-You were about to update the client side to create new chats, load chats.
+#### Chat Client
 
+* On page load, fetch all chat information
+  * Ping api
+  * Api returns chat room objects
+    * Chat room data model: participants, messages, createdAt
+  * Take data and render
+    * Chat room view: One chat in focus (By default, youngest chat). Chat list ordered chronologically on the left.
+  * Socket Client listens for ...
+    * Create new chat
+    * Send message
+
+#### Chat Server
+
+* Sockets Listen for ...
+  * Create new chat room
+  * New messages sent
+    * Saves each message/conversation
