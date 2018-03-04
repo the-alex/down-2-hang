@@ -57,6 +57,17 @@ db.mongoose.connection.collections['users'].drop(function(err) {
           chatName: 'bar',
           participants: [docs[0]._id, docs[1]._id, docs[2]._id],
         }),
+        new db.models.Chat({
+          messages: fakeMessages.map(msg => {
+            return {
+              text: msg.text,
+              user: docs[Math.floor(Math.random() * docs.length)]._id,
+            };
+          }),
+          chatName: 'lobby',
+          participants: docs,
+        }),
+
       ];
 
       db.models.Chat.insertMany(chats).then(insertedChats => {
