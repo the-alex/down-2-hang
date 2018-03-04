@@ -72,9 +72,7 @@ class Signup extends Component {
               </Form>
               <Message>
                 Been here before?{' '}
-                <a>
-                  <Link to="/login">Login</Link>
-                </a>
+                <Link to="/login">Login</Link>
               </Message>
             </Grid.Column>
           </Grid>

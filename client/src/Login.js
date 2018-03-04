@@ -72,9 +72,7 @@ class Login extends Component {
               </Form>
               <Message>
                 Need some credentials?{' '}
-                <a>
-                  <Link to="/signup">Sign Up</Link>
-                </a>
+                <Link to="/signup">Sign Up</Link>
               </Message>
             </Grid.Column>
           </Grid>

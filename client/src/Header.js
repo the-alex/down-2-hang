@@ -9,16 +9,16 @@ import Auth from './Auth.js';
 const Header = () => (
   <Menu fixed="top" inverted>
     <Container>
-      <Menu.Item as="a" header>
+      <Menu.Item header>
         <Image size="tiny" src="/logo.png" style={{marginRight: '1.5em'}} />
         <Link to="/">Down2Hang</Link>
       </Menu.Item>
       {Auth.isAuthenticated() ? (
-        <Menu.Item floated="right" as="a" onClick={() => Auth.logout()}>
-          <Link to='/login'>Logout</Link>
+        <Menu.Item as="span" floated="right" onClick={() => Auth.logout()}>
+          <Link to="/login">Logout</Link>
         </Menu.Item>
       ) : (
-        <Menu.Item floated="right" as="a">
+        <Menu.Item floated="right">
           <Link to="/login">Login</Link>
         </Menu.Item>
       )}
