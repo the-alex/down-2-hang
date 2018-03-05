@@ -22,13 +22,17 @@ class Chat extends React.Component {
 
     this.socket = io('localhost:3000');
 
-    this.socket.on('RECEIVE_MESSAGE', function(data) {
-      addMessage(data);
+    this.socket.on('RECEIVE_MESSAGE', data => {
+      if (this.state.focused === data.chatName) {
+        addMessage(data);
+      }
     });
 
     const addMessage = data => {
       console.log(data);
       this.setState({messages: [...this.state.messages, data]});
+      let chatWindow = document.getElementById('chatWindow');
+      chatWindow.scrollTop = chatWindow.scrollHeight;
     };
 
     this.sendMessage = ev => {
@@ -67,6 +71,7 @@ class Chat extends React.Component {
     return (
       <Container>
         <Segment>
+          <Header as="h2">Chat</Header>
           <Dropdown
             text={this.state.focused}
             fluid
@@ -82,20 +87,23 @@ class Chat extends React.Component {
             }
             onChange={this.switchChat}
           />
-          <Header as="h2">Chat</Header>
-          <div className="ui small feed">
-            {this.state.messages.map((message, i) => {
-              return (
-                <div key={i} className="event">
-                  <div className="content">
-                    <div className="summary">
-                      {message.user.username} :: {message.text}
+          <Segment
+            raised
+            style={{maxHeight: '300px', overflow: 'scroll'}}
+            id="chatWindow">
+            <div className="ui small feed">
+              {this.state.messages.map((message, i) => {
+                return (
+                  <div key={i} className="event">
+                    <div className="content">
+                      <div className="summary">// {message.user.username}</div>
+                      <p>{message.text}</p>
                     </div>
                   </div>
-                </div>
-              );
-            })}
-          </div>
+                );
+              })}
+            </div>
+          </Segment>
         </Segment>
         <Segment>
           <Form.Input

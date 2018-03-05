@@ -43,14 +43,12 @@ class Home extends Component {
   render() {
     return (
       <Container style={{marginTop: '7em'}}>
-        <Grid celled="internally" stackable>
-          <Grid.Column width={6}>
+        <Grid stackable>
+          <Grid.Column width={10}>
             <StatusEditor currentStatus={this.state.currentStatus} />
-          </Grid.Column>
-          <Grid.Column width={6}>
             <StatusList statuses={this.state.statuses} />
           </Grid.Column>
-          <Grid.Column width={4}>
+          <Grid.Column width={6}>
             <Chat />
           </Grid.Column>
         </Grid>

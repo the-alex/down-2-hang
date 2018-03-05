@@ -126,7 +126,7 @@ io.on('connection', socket => {
         chat.save((err, doc) => {
           console.log(doc);
           // Send data to clients
-          io.emit('RECEIVE_MESSAGE', {user, text: message});
+          io.emit('RECEIVE_MESSAGE', {user, text: message, chatName});
         });
       });
   });
