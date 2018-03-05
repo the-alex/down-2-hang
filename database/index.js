@@ -17,7 +17,7 @@ const userSchema = mongoose.Schema({
 // Message
 const messageSchema = mongoose.Schema(
   {
-    user: mongoose.Schema.ObjectId,
+    user: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
     text: String,
   },
   {timestamps: true},
@@ -27,8 +27,8 @@ const messageSchema = mongoose.Schema(
 const chatSchema = mongoose.Schema(
   {
     messages: [messageSchema],
-    chatName: {type: String, default: 'lobby', unique: true},
-    participants: [mongoose.Schema.ObjectId],
+    name: {type: String, default: 'lobby', unique: true},
+    participants: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
   },
   {timestamps: true},
 );

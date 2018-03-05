@@ -44,7 +44,7 @@ db.mongoose.connection.collections['users'].drop(function(err) {
               user: docs.slice(0, 2)[Math.floor(Math.random() * 2)]._id,
             };
           }),
-          chatName: 'party',
+          name: 'party',
           participants: [docs[0]._id, docs[1]._id],
         }),
         new db.models.Chat({
@@ -54,7 +54,7 @@ db.mongoose.connection.collections['users'].drop(function(err) {
               user: docs.slice(0, 3)[Math.floor(Math.random() * 3)]._id,
             };
           }),
-          chatName: 'bar',
+          name: 'bar',
           participants: [docs[0]._id, docs[1]._id, docs[2]._id],
         }),
         new db.models.Chat({
@@ -64,7 +64,7 @@ db.mongoose.connection.collections['users'].drop(function(err) {
               user: docs[Math.floor(Math.random() * docs.length)]._id,
             };
           }),
-          chatName: 'lobby',
+          name: 'lobby',
           participants: docs,
         }),
 
