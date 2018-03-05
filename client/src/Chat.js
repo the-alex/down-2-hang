@@ -1,5 +1,5 @@
 import React from 'react';
-import {Container, Segment, Header, Form} from 'semantic-ui-react';
+import {Container, Segment, Header, Form, Dropdown} from 'semantic-ui-react';
 import io from 'socket.io-client';
 import Auth from './Auth.js';
 import axios from 'axios';
@@ -8,13 +8,16 @@ class Chat extends React.Component {
   constructor(props) {
     super(props);
 
-    this.fetchMessages = this.fetchMessages.bind(this);
+    this.fetchChats = this.fetchChats.bind(this);
+    this.switchChat = this.switchChat.bind(this);
 
     this.state = {
-      username: Auth.username,
       message: '',
+      // Messages for in-focus chat
       messages: [],
-      //room: 'lobby',
+      // List of chats returned at fetch
+      chats: [],
+      focused: 'lobby',
     };
 
     this.socket = io('localhost:3000');
@@ -26,41 +29,69 @@ class Chat extends React.Component {
     const addMessage = data => {
       console.log(data);
       this.setState({messages: [...this.state.messages, data]});
-      console.log(this.state.messages);
     };
 
     this.sendMessage = ev => {
       ev.preventDefault();
       this.socket.emit('SEND_MESSAGE', {
-        author: this.state.username,
+        username: Auth.username,
         message: this.state.message,
+        chatName: this.state.focused,
       });
       this.setState({message: ''});
     };
   }
 
-  fetchMessages() {
-    axios.get('/api/chats').then(results => {
+  fetchChats(callback) {
+    axios.get('/api/chats', {username: Auth.username}).then(results => {
       console.log(results);
+      // Get the messages for the chat in focus
+      const chatMessages = results.data.filter(
+        chat => chat.name === this.state.focused,
+      )[0].messages;
+      console.log(chatMessages);
+      this.setState({chats: results.data, messages: chatMessages}, callback);
+    });
+  }
+
+  switchChat(ev, data) {
+    console.log(data.value);
+    this.fetchChats(() => {
+      this.setState({focused: data.value});
     });
   }
 
   componentDidMount() {
-    this.fetchMessages();
+    this.fetchChats();
   }
 
   render() {
     return (
       <Container>
         <Segment>
+          <Dropdown
+            text={this.state.focused}
+            fluid
+            selection
+            options={
+              this.state.chats
+                ? this.state.chats.map((chat, i) => ({
+                    key: i,
+                    text: chat.name,
+                    value: chat.name,
+                  }))
+                : ''
+            }
+            onChange={this.switchChat}
+          />
           <Header as="h2">Chat</Header>
           <div className="ui small feed">
-            {this.state.messages.map(message => {
+            {this.state.messages.map((message, i) => {
               return (
-                <div className="event">
+                <div key={i} className="event">
                   <div className="content">
                     <div className="summary">
-                      {message.author}: {message.message}
+                      {message.user.username} :: {message.text}
                     </div>
                   </div>
                 </div>

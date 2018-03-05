@@ -71,9 +71,14 @@ app.post('/api/status', (request, response) => {
 
 // Find all chats with this username in them.
 app.get('/api/chats', (request, response) => {
-  db.models.Chat.find({}).then(chats => {
-    response.status(200).send(chats);
-  });
+  const {username} = request.body;
+  // TODO: Filter by only chats the user is a participant in
+  db.models.Chat.find()
+    .populate('participants')
+    .populate('messages.user')
+    .then(chats => {
+      response.status(200).send(JSON.stringify(chats));
+    });
 });
 
 // Create a new chat room, potentially with selected users
@@ -90,8 +95,6 @@ app.post('/api/chats', (request, response) => {
     });
 });
 
-
-
 // SERVER SETUP ------------------------------------------------
 
 let port = process.env.PORT || 3001;
@@ -105,8 +108,27 @@ io = socketIO(server);
 io.on('connection', socket => {
   console.log(`New socket.io connection: ${socket.id}`);
 
+  // Append new message to chat using data
   socket.on('SEND_MESSAGE', data => {
-    io.emit('RECEIVE_MESSAGE', data);
+    const {username, message, chatName} = data;
+    // Save message to chat
+    db.models.Chat.findOne({name: chatName})
+      .populate('participants')
+      .then(chat => {
+        // Get the user._id
+        const user = chat.participants.filter(
+          user => user.username === username,
+        )[0];
+        chat.messages.push({
+          user: user._id,
+          text: message,
+        });
+        chat.save((err, doc) => {
+          console.log(doc);
+          // Send data to clients
+          io.emit('RECEIVE_MESSAGE', {user, text: message});
+        });
+      });
   });
 
   socket.join('lobby');
