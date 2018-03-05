@@ -71,28 +71,46 @@ app.post('/api/status', (request, response) => {
 
 // Find all chats with this username in them.
 app.get('/api/chats', (request, response) => {
-  const {username} = request.body;
+  const {username} = request.query;
+  console.log(request.query);
+  console.log(username);
   // TODO: Filter by only chats the user is a participant in
   db.models.Chat.find()
     .populate('participants')
     .populate('messages.user')
     .then(chats => {
-      response.status(200).send(JSON.stringify(chats));
+      // Filter for chats with username as a participant
+      let theseChats = [];
+      for (const chat of chats) {
+        let participants = chat.participants.map(
+          participant => participant.username,
+        );
+        console.log(participants)
+        if (participants.includes(username)) {
+          theseChats.push(chat);
+        }
+      }
+      response.status(200).send(theseChats);
     });
 });
 
 // Create a new chat room, potentially with selected users
 app.post('/api/chats', (request, response) => {
-  const {chatName} = request.body;
-  db.models.Chat.create({
-    chatName,
-  })
-    .then(result => {
-      response.status(200).send('Chat created');
+  const {name, participants} = request.body;
+  // For each participant, get the user._id
+  db.models.User.find({username: {$in: participants}}).then(users => {
+    let userIds = users.map(user => user._id);
+    db.models.Chat.create({
+      name,
+      participants: userIds,
     })
-    .catch(error => {
-      response.send(JSON.stringify({error: error}));
-    });
+      .then(result => {
+        response.status(200).send({msg: 'Chat created'});
+      })
+      .catch(error => {
+        response.send({error: error});
+      });
+  });
 });
 
 // SERVER SETUP ------------------------------------------------
@@ -124,7 +142,6 @@ io.on('connection', socket => {
           text: message,
         });
         chat.save((err, doc) => {
-          console.log(doc);
           // Send data to clients
           io.emit('RECEIVE_MESSAGE', {user, text: message, chatName});
         });

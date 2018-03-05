@@ -47,7 +47,7 @@ class Chat extends React.Component {
   }
 
   fetchChats(callback) {
-    axios.get('/api/chats', {username: Auth.username}).then(results => {
+    axios.get(`/api/chats?username=${Auth.username}`).then(results => {
       console.log(results);
       // Get the messages for the chat in focus
       const chatMessages = results.data.filter(

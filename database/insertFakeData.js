@@ -65,9 +65,8 @@ db.mongoose.connection.collections['users'].drop(function(err) {
             };
           }),
           name: 'lobby',
-          participants: docs,
+          participants: docs.map(doc => doc._id),
         }),
-
       ];
 
       db.models.Chat.insertMany(chats).then(insertedChats => {
