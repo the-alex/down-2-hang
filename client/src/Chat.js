@@ -29,7 +29,6 @@ class Chat extends React.Component {
     });
 
     const addMessage = data => {
-      console.log(data);
       this.setState({messages: [...this.state.messages, data]});
       let chatWindow = document.getElementById('chatWindow');
       chatWindow.scrollTop = chatWindow.scrollHeight;
@@ -48,18 +47,15 @@ class Chat extends React.Component {
 
   fetchChats(callback) {
     axios.get(`/api/chats?username=${Auth.username}`).then(results => {
-      console.log(results);
       // Get the messages for the chat in focus
       const chatMessages = results.data.filter(
         chat => chat.name === this.state.focused,
       )[0].messages;
-      console.log(chatMessages);
       this.setState({chats: results.data, messages: chatMessages}, callback);
     });
   }
 
   switchChat(ev, data) {
-    console.log(data.value);
     this.setState({focused: data.value}, this.fetchChats);
   }
 

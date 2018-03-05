@@ -53,7 +53,6 @@ app.get('/api/status', (request, response) => {
 app.post('/api/status', (request, response) => {
   // Get the current user
   const {username, statusText} = request.body;
-  console.log(`statusText: ${statusText}`);
   // Search for the user
   db.models.User.findOne({username})
     .then(user => {
@@ -72,8 +71,6 @@ app.post('/api/status', (request, response) => {
 // Find all chats with this username in them.
 app.get('/api/chats', (request, response) => {
   const {username} = request.query;
-  console.log(request.query);
-  console.log(username);
   // TODO: Filter by only chats the user is a participant in
   db.models.Chat.find()
     .populate('participants')
@@ -85,7 +82,6 @@ app.get('/api/chats', (request, response) => {
         let participants = chat.participants.map(
           participant => participant.username,
         );
-        console.log(participants)
         if (participants.includes(username)) {
           theseChats.push(chat);
         }
