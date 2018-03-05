@@ -20,7 +20,7 @@ class Chat extends React.Component {
       focused: 'lobby',
     };
 
-    this.socket = io('localhost:3000');
+    this.socket = io();
 
     this.socket.on('RECEIVE_MESSAGE', data => {
       if (this.state.focused === data.chatName) {
