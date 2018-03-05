@@ -56,9 +56,7 @@ class Chat extends React.Component {
 
   switchChat(ev, data) {
     console.log(data.value);
-    this.fetchChats(() => {
-      this.setState({focused: data.value});
-    });
+    this.setState({focused: data.value}, this.fetchChats);
   }
 
   componentDidMount() {
